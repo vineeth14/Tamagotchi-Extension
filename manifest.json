@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "OctoClicker",
+  "version": "1.0",
+  "description": "Count number of times you click on a page",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": ["storage", "tabs"],
+  "icons": {
+    "98": "icons/octo_icon_96x96.png"
+  },
+  "browser_action": {
+    "default_area": "navbar",
+    "default_icon": "icons/octo_icon_96x96.png"
+  }
+}
