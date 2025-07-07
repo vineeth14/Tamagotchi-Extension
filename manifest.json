@@ -4,7 +4,8 @@
   "version": "1.0",
   "description": "Count number of times you click on a page",
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": true
   },
   "content_scripts": [
     {
@@ -12,12 +13,13 @@
       "js": ["content.js"]
     }
   ],
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "alarms"],
   "icons": {
     "98": "icons/octo_icon_96x96.png"
   },
   "browser_action": {
     "default_area": "navbar",
-    "default_icon": "icons/octo_icon_96x96.png"
+    "default_icon": "icons/octo_icon_96x96.png",
+    "default_popup": "popup/tamagotchi.html"
   }
 }

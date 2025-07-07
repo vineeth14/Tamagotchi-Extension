@@ -1,0 +1,6 @@
+.octo {
+    max-width: 100px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto 10px;
+}

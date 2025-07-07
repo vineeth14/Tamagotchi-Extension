@@ -1,13 +1,9 @@
-let clickCount = 0
-
 console.log('Content script loaded')
 
 document.addEventListener('click', () => {
-  clickCount++
   browser.runtime
     .sendMessage({
-      type: 'click-count',
-      count: clickCount
+      type: 'click-increment'
     })
     .then(response => {
       console.log('background response', response)
