@@ -10,14 +10,16 @@ async function getClickCount() {
 
 getClickCount();
 
-// const port = browser.runtime.connect({ name: "popup-channel" });
+const port = browser.runtime.connect({ name: "popup-channel" });
 
-// port.postMessage({ type: "get-state" });
-// port.onMessage.addListener((msg) => {
-//   if (msg.type === "state") {
-//     console.log("tamagotchi port channel connected");
-//   }
-// });
+port.postMessage({ type: "get-state" });
+port.onMessage.addListener((msg) => {
+  if (msg.type === "state") {
+    console.log("tamagotchi port channel connected");
+  } else if (msg.type === "dead-pet") {
+    alert("Tamagotchi Died :( \n Restart Game by clicking play! 🐙");
+  }
+});
 
 const playButton = document.getElementById("play-game");
 const feedButton = document.getElementById("feed-button");

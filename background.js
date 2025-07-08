@@ -19,20 +19,21 @@ async function update_badge() {
   });
 }
 
-// browser.runtime.onMessage.addListener((msg, sender) => {
-//   if (msg.type === "play-clicked") {
-//     console.log("Message from tamagotchi");
-//   }
-// });
+let popupPort = null;
+browser.runtime.onConnect.addListener((port) => {
+  if (port.name === "popup-channel") {
+    popupPort = port;
+    port.onDisconnect.addListener(() => {
+      popupPort = null;
+    });
+  }
+});
 
-// browser.runtime.onConnect.addListener((port) => {
-//   port.onMessage.addListener(async (msg) => {
-//     if (msg.type === "get-state") {
-//       console.log("background channel");
-//       port.postMessage({ type: "state" });
-//     }
-//   });
-// });
+function notify_popup(data) {
+  if (popupPort && data == "dead") {
+    popupPort.postMessage({ type: "dead-pet" });
+  }
+}
 
 const HUNGER_RATE = 0.0001;
 browser.runtime.onStartup.addListener(init);
@@ -47,7 +48,8 @@ async function init() {
     gameState = {
       health: 100,
       hungriness: 0,
-      boredom: false,
+      isBoredom: false,
+      isAlive: true,
       lastTimeStamp: Date.now(),
     };
     await browser.storage.local.set({ gameState });
@@ -67,8 +69,17 @@ async function onAlarm(alarm) {
     100,
     (gameState.hungriness || 0) + HUNGER_RATE * timeDiff
   );
+  const wasAlive = gameState.isAlive;
+  gameState.isAlive = isAliveState(gameState);
   gameState.lastTimeStamp = now;
   await browser.storage.local.set({ gameState });
+  if (wasAlive && !gameState.isAlive) {
+    notify_popup("dead");
+  }
+}
+
+function isAliveState(gameState) {
+  return gameState && gameState.hungriness < 100;
 }
 
 browser.runtime.onMessage.addListener(async (msg) => {
@@ -77,7 +88,8 @@ browser.runtime.onMessage.addListener(async (msg) => {
     gameState = {
       health: 100,
       hungriness: 0,
-      boredom: false,
+      isBoredom: false,
+      isAlive: true,
       lastTimeStamp: Date.now(),
     };
   }
@@ -88,6 +100,7 @@ browser.runtime.onMessage.addListener(async (msg) => {
     (gameState.hungriness || 0) + HUNGER_RATE * timeDiff
   );
   gameState.lastTimeStamp = now;
+  await browser.storage.local.set({ gameState });
   switch (msg.type) {
     case "click-increment":
       const { clickCount = 0 } = await browser.storage.local.get({
@@ -101,16 +114,19 @@ browser.runtime.onMessage.addListener(async (msg) => {
       return gameState;
     case "feed":
       gameState.hungriness = Math.max(0, gameState.hungriness - msg.amount);
+      gameState.isAlive = isAliveState(gameState);
       await browser.storage.local.set({ gameState });
       return { success: true, gameState };
     case "play-clicked":
       gameState = {
         health: 100,
         hungriness: 0,
-        boredom: false,
+        isBoredom: false,
+        isAlive: true,
         lastTimeStamp: Date.now(),
       };
       await browser.storage.local.set({ gameState });
+      break;
     default:
       return;
   }
