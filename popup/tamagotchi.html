@@ -2,23 +2,35 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="tamagotchi.css">
   </head>
   <body>
-    <h1>Tamagotchi</h1>
-    <div id="octo-pet-container">
-  <img class="octo" id="octo-pet" src="/assets/octo_icon.png" alt="Keep your Octo-Pet!! Alive" />
-  <div class="tamagotchi" id="tamagotchi"></div>
-  <div class="hungry-tamagotchi" id="hungry-tamagotchi"></div>
-  <div class="sad-tamagotchi" id="sad-tamagotchi"></div>
-</div>
-  <h3>Food Farmed <span id="available-food-count">0</span></h3>
-  <h3>Hungriness Level <span id="hungriness-level-count">0</span></h3>
-  <!-- <div id="counter-display">Loading...</div> -->
-  <button class="button" id="play-game"> Play</button>
-    <button class="button" id="feed-button">Feed</button>
-  <button id="test-state">Show State</button>
-  <pre id="state-output"></pre>
-  <script src="tamagotchi.js"></script>
+    <div class="tamagotchi-card">
+      <h1 class="tamagotchi-title">Tamagotchi</h1>
+      <p class="tamagotchi-instructions">Click 5 times to earn 1 shrimp<br>Keep your Octo-Pet alive and happy! </p>
+      <div class="octo-pet-container" id="octo-pet-container">
+        <img class="octo" id="octo-pet" src="/assets/octo_icon.png" alt="Your Octo-Pet" />
+      </div>
+      <div class="stats-row">
+        <div class="stat-block">
+          <span class="stat-label">🍖 Food</span>
+          <span class="stat-value" id="available-food-count">0</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">😋 Hunger</span>
+          <span class="stat-value" id="hungriness-level-count">0</span>
+        </div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="hungriness-bar"></div>
+      </div>
+      <div class="button-row">
+        <button class="tamagotchi-btn" id="play-game"><span class="emoji">🎮</span>Play Game</button>
+        <button class="tamagotchi-btn" id="feed-button"><span class="emoji">🍤</span>Feed Octo!</button>
+      </div>
+    </div>
+    <script src="tamagotchi.js"></script>
   </body>
 </html>

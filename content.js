@@ -1,14 +1,12 @@
-console.log('Content script loaded')
-
-document.addEventListener('click', () => {
+document.addEventListener("click", () => {
   browser.runtime
     .sendMessage({
-      type: 'click-increment'
+      type: "click-increment",
     })
-    .then(response => {
-      console.log('background response', response)
+    .then((response) => {
+      console.log("background response", response);
     })
-    .catch(err => {
-      console.error('Error sending number of clicks', err)
-    })
-})
+    .catch((err) => {
+      console.error("Error sending number of clicks", err);
+    });
+});

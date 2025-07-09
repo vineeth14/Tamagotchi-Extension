@@ -42,9 +42,6 @@ browser.runtime.onConnect.addListener((port) => {
 });
 
 function notify_popup(data) {
-  // if (popupPort && data == "dead") {
-  //   popupPort.postMessage({ type: "dead-pet" });
-  // }
   console.log("Your Pet has died");
   browser.notifications
     .create({
@@ -116,10 +113,16 @@ browser.runtime.onMessage.addListener(async (msg) => {
     case "gameState":
       return gameState;
     case "feed":
-      gameState.hungriness = Math.max(0, gameState.hungriness - msg.amount);
-      gameState.isAlive = isAliveState(gameState);
-      await browser.storage.local.set({ gameState });
-      return { success: true, gameState };
+      if (gameState.availableFood > 0) {
+        gameState.hungriness = Math.max(0, gameState.hungriness - msg.amount);
+        gameState.availableFood -= 1;
+        gameState.clickCount -= 5;
+        gameState.isAlive = isAliveState(gameState);
+        await browser.storage.local.set({ gameState });
+        return { success: true, gameState };
+      } else {
+        return { success: false, gameState };
+      }
     case "play-clicked":
       gameState = DEFAULT_STATE;
       await browser.storage.local.set({ gameState });
