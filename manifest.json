@@ -13,7 +13,7 @@
       "js": ["content.js"]
     }
   ],
-  "permissions": ["storage", "tabs", "alarms"],
+  "permissions": ["storage", "tabs", "alarms", "notifications"],
   "icons": {
     "98": "icons/octo_icon_96x96.png"
   },

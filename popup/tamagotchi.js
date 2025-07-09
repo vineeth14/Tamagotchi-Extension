@@ -1,14 +1,27 @@
-async function getClickCount() {
+const foodEl = document.getElementById("available-food-count");
+const hungryEl = document.getElementById("hungriness-level-count");
+
+function paintGameState({ availableFood = 0, hungriness = 0 }) {
+  foodEl.textContent = availableFood;
+  hungryEl.textContent = hungriness;
+}
+
+async function update_state() {
   try {
-    const countObj = await browser.storage.local.get(["clickCount"]);
-    const count = countObj.clickCount || 0;
-    document.getElementById("counter-display").textContent = count;
+    const { gameState } = await browser.storage.local.get({ gameState: {} });
+    paintGameState(gameState);
   } catch (error) {
-    console.error("Error getting click count:", error);
+    console.error("Error updating game state values", error);
   }
 }
 
-getClickCount();
+update_state();
+
+browser.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && changes.gameState) {
+    paintGameState(changes.gameState.newValue);
+  }
+});
 
 const port = browser.runtime.connect({ name: "popup-channel" });
 
@@ -34,13 +47,6 @@ playButton.addEventListener("click", async () => {
 feedButton.addEventListener("click", async () => {
   await browser.runtime.sendMessage({ type: "feed", amount: 5 });
 });
-
-async function refreshUI() {
-  const state = await browser.runtime.sendMessage({ type: "gameState" });
-  console.log("state", state);
-}
-
-window.onload = refreshUI;
 
 document.querySelector("#test-state").addEventListener("click", async () => {
   const state = await browser.runtime.sendMessage({ type: "gameState" });
