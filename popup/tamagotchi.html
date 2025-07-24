@@ -1,34 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="tamagotchi.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tamagotchi.css" />
   </head>
   <body>
     <div class="tamagotchi-card">
       <h1 class="tamagotchi-title">Tamagotchi</h1>
-      <p class="tamagotchi-instructions">Click 5 times to earn 1 shrimp<br>Keep your Octo-Pet alive and happy! </p>
+      <p class="tamagotchi-instructions">
+        Click 5 times to earn 1 shrimp<br />Keep your Octo-Pet alive and happy!
+      </p>
       <div class="octo-pet-container" id="octo-pet-container">
-        <img class="octo" id="octo-pet" src="/assets/octo_icon.png" alt="Your Octo-Pet" />
+        <img
+          class="octo"
+          id="octo-pet"
+          src="/assets/octo_icon.png"
+          alt="Your Octo-Pet"
+        />
       </div>
+      <div class="mood-status" id="mood-status">Your octo is content</div>
+      <div class="site-status" id="site-status">Browsing: Unknown</div>
+      
       <div class="stats-row">
         <div class="stat-block">
-          <span class="stat-label">🍖 Food</span>
+          <span class="stat-label">Happy</span>
+          <span class="stat-value" id="happiness-level-count">50</span>
+        </div>
+        <div class="stat-block">
+          <span class="stat-label">Food</span>
           <span class="stat-value" id="available-food-count">0</span>
         </div>
         <div class="stat-block">
-          <span class="stat-label">😋 Hunger</span>
+          <span class="stat-label">Hunger</span>
           <span class="stat-value" id="hungriness-level-count">0</span>
         </div>
       </div>
+      <div class="progress-label" id="happiness-label">Happiness</div>
       <div class="progress-bar-container">
-        <div class="progress-bar" id="hungriness-bar"></div>
+        <div class="progress-bar happiness-bar" id="happiness-bar"></div>
+      </div>
+      <div class="progress-label" id="hunger-label">Hunger</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar hunger-bar" id="hungriness-bar"></div>
       </div>
       <div class="button-row">
-        <button class="tamagotchi-btn" id="play-game"><span class="emoji">🎮</span>Play Game</button>
-        <button class="tamagotchi-btn" id="feed-button"><span class="emoji">🍤</span>Feed Octo!</button>
+        <button class="tamagotchi-btn" id="play-game">
+          <span class="emoji">🎮</span>Play Game
+        </button>
+        <button class="tamagotchi-btn" id="feed-button">
+          <span class="emoji">🍤</span>Feed Octo!
+        </button>
       </div>
     </div>
     <script src="tamagotchi.js"></script>

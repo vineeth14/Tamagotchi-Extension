@@ -1,11 +1,40 @@
 const DEFAULT_STATE = {
-  health: 100,
+  // health: 100,
   hungriness: 0,
+  happiness: 50,
   isBoredom: false,
   isAlive: true,
   lastTimeStamp: Date.now(),
   availableFood: 0,
   clickCount: 0,
+  currentSite: null,
+  siteStartTime: null,
+  totalTimeSpent: {},
+};
+
+const siteCategories = {
+  educational: {
+    sites: ["wikipedia.org", "coursera.org", "github.com"],
+    happiness: 3,
+  },
+  productivity: {
+    sites: ["gmail.com", "docs.google.com", "notion.so", "recurse.com"],
+    happiness: 3,
+  },
+  social: {
+    sites: [
+      "google.com",
+      "facebook.com",
+      "twitter.com",
+      "instagram.com",
+      "tiktok.com",
+    ],
+    happiness: -2,
+  },
+  entertainment: {
+    sites: ["youtube.com", "netflix.com", "twitch.tv"],
+    happiness: -2,
+  },
 };
 
 browser.runtime.onInstalled.addListener(async () => {
@@ -80,19 +109,74 @@ async function onAlarm(alarm) {
   const timeDiff = now - (gameState.lastTimeStamp || now);
   gameState.hungriness = Math.min(
     100,
-    (gameState.hungriness || 0) + HUNGER_RATE * timeDiff
+    (gameState.hungriness || 0) + HUNGER_RATE * timeDiff,
   );
   const wasAlive = gameState.isAlive;
   gameState.isAlive = isAliveState(gameState);
   gameState.lastTimeStamp = now;
-  await browser.storage.local.set({ gameState });
   if (wasAlive && !gameState.isAlive) {
     notify_popup("dead");
   }
+
+  if (gameState.currentSite && gameState.siteStartTime) {
+    const timeOnCurrentSite = Date.now() - gameState.siteStartTime;
+    gameState = updateHappinessForTimeSpent(
+      gameState,
+      gameState.currentSite,
+      timeOnCurrentSite,
+    );
+    gameState.siteStartTime = Date.now();
+  }
+  await browser.storage.local.set({ gameState });
 }
 
 function isAliveState(gameState) {
   return gameState && gameState.hungriness < 100;
+}
+
+function getCategoryForUrl(url) {
+  if (!url) return null;
+  for (const [category, config] of Object.entries(siteCategories)) {
+    if (config.sites.some((site) => url.includes(site))) {
+      return category;
+    }
+  }
+  return null;
+}
+
+function updateHappinessForTimeSpent(gameState, url, timeMs) {
+  const category = getCategoryForUrl(url);
+  if (!category) return gameState;
+  const minutes = timeMs / (1000 * 60);
+  const happinessRates = {
+    educational: 1,
+    productivity: 0.8,
+    social: -0.5,
+    entertainment: -0.5,
+  };
+  const change = (happinessRates[category] || 0) * minutes;
+  return {
+    ...gameState,
+    happiness: Math.max(0, Math.min(100, gameState.happiness + change)),
+  };
+}
+
+function handleSiteExit(gameState) {
+  if (!gameState.currentSite || !gameState.siteStartTime) {
+    return gameState;
+  }
+  const timeSpent = Date.now() - gameState.siteStartTime;
+  const updatedState = updateHappinessForTimeSpent(
+    gameState,
+    gameState.currentSite,
+    timeSpent,
+  );
+  const category = getCategoryForUrl(gameState.currentSite);
+  if (category) {
+    updatedState.totalTimeSpent[category] =
+      (updatedState.totalTimeSpent[category] || 0) + timeSpent;
+  }
+  return updatedState;
 }
 
 browser.runtime.onMessage.addListener(async (msg) => {
@@ -125,6 +209,20 @@ browser.runtime.onMessage.addListener(async (msg) => {
       }
     case "play-clicked":
       gameState = DEFAULT_STATE;
+      await browser.storage.local.set({ gameState });
+      break;
+    case "site-enter":
+      if (gameState.currentSite && gameState.siteStartTime) {
+        gameState = handleSiteExit(gameState);
+      }
+      gameState.currentSite = msg.url;
+      gameState.siteStartTime = Date.now();
+      await browser.storage.local.set({ gameState });
+      break;
+    case "site-exit":
+      gameState = handleSiteExit(gameState);
+      gameState.currentSite = null;
+      gameState.siteStartTime = null;
       await browser.storage.local.set({ gameState });
       break;
     default:
