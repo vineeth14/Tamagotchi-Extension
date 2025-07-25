@@ -18,6 +18,9 @@ body {
   padding: 0;
   background: var(--main-bg);
   color: var(--text-main);
+  width: 320px;
+  height: 500px;
+  overflow: hidden;
 }
 
 .tamagotchi-card {
@@ -26,8 +29,10 @@ body {
   border: 2px solid var(--accent2);
   box-shadow: var(--shadow);
   margin: 0;
-  padding: 28px 18px 18px 18px;
-  max-width: 320px;
+  padding: 12px 16px 12px 16px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,8 +42,8 @@ body {
 }
 
 .tamagotchi-title {
-  font-size: 1.7rem;
-  margin-bottom: 0.3em;
+  font-size: 1.3rem;
+  margin-bottom: 0.2em;
   color: var(--accent);
   letter-spacing: 1px;
   text-shadow:
@@ -49,31 +54,32 @@ body {
 
 .tamagotchi-instructions {
   margin-top: 0;
-  margin-bottom: 1em;
-  font-size: 1rem;
+  margin-bottom: 0.5em;
+  font-size: 0.85rem;
   color: var(--accent2);
   font-family: "Fredoka One", Arial, sans-serif;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .octo-pet-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
   background: var(--accent3);
   border-radius: 50%;
   border: 2px solid var(--accent2);
   box-shadow: 0 2px 8px #42a5f533;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 }
 
 .octo {
-  max-width: 80px;
+  max-width: 64px;
   height: auto;
   object-fit: contain;
-  margin: 0 auto 8px;
+  margin: 0;
   transition:
     transform 0.18s,
     filter 0.18s,
@@ -122,8 +128,8 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 16px;
-  gap: 8px;
+  margin-bottom: 8px;
+  gap: 6px;
 }
 .stat-block {
   display: flex;
@@ -132,22 +138,22 @@ body {
   flex: 1;
   background: #f0f7fa;
   border: 1.5px solid var(--accent2);
-  border-radius: 8px;
-  padding: 5px 0 2px 0;
+  border-radius: 6px;
+  padding: 3px 0 1px 0;
   box-shadow: 0 1px 4px #42a5f522;
-  min-width: 70px;
+  min-width: 60px;
 }
 .stat-label {
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: var(--accent);
   text-shadow: 1px 1px 0 #fff;
   letter-spacing: 1px;
   font-family: "Fredoka One", Arial, sans-serif;
 }
 .stat-value {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--accent2);
-  margin-top: 2px;
+  margin-top: 1px;
   font-family: "Fredoka One", Arial, sans-serif;
   font-weight: bold;
   letter-spacing: 1px;
@@ -158,10 +164,10 @@ body {
 
 .progress-bar-container {
   width: 100%;
-  height: 14px;
+  height: 10px;
   background: var(--progress-bg);
-  border-radius: 8px;
-  margin-bottom: 16px;
+  border-radius: 6px;
+  margin-bottom: 8px;
   overflow: hidden;
   border: 1.5px solid var(--accent2);
   box-shadow: 0 1px 4px rgba(66, 165, 245, 0.3);
@@ -177,20 +183,20 @@ body {
 
 .button-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 0;
   width: 100%;
   justify-content: center;
 }
 .tamagotchi-btn {
   font-family: "Fredoka One", Arial, sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   font-weight: bold;
   background: var(--accent2);
   color: #fff;
   border: 1.5px solid var(--accent3);
-  border-radius: 8px;
-  padding: 10px 16px;
+  border-radius: 6px;
+  padding: 6px 12px;
   box-shadow: 0 1px 4px #42a5f533;
   cursor: pointer;
   transition:
@@ -206,7 +212,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6em;
+  gap: 0.4em;
   line-height: 1.2;
   vertical-align: middle;
 }
@@ -234,10 +240,10 @@ body {
 
 /* Progress bar improvements - reusing existing design tokens */
 .progress-label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--accent);
-  margin-bottom: 4px;
-  margin-top: 12px;
+  margin-bottom: 2px;
+  margin-top: 6px;
   font-family: "Fredoka One", Arial, sans-serif;
   font-weight: bold;
   text-align: center;
@@ -274,25 +280,25 @@ body {
 
 /* Status indicators - reusing existing design tokens */
 .mood-status {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: var(--accent);
   text-align: center;
-  margin: 12px 0 8px 0;
+  margin: 6px 0 4px 0;
   font-family: "Fredoka One", Arial, sans-serif;
   font-weight: bold;
   letter-spacing: 1px;
   text-shadow: 1px 1px 0 #fff;
   background: var(--accent3);
-  padding: 6px 12px;
-  border-radius: 16px;
+  padding: 4px 8px;
+  border-radius: 12px;
   border: 1px solid var(--accent2);
 }
 
 .site-status {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: var(--text-main);
   text-align: center;
-  margin: 0 0 16px 0;
+  margin: 0 0 8px 0;
   font-family: "Fredoka One", Arial, sans-serif;
   opacity: 0.6;
   font-style: italic;
